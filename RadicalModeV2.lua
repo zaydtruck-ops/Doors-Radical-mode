@@ -59,9 +59,27 @@ local StormSpawns = {
 }
 
 --Doors where entities can't spawn
-local DontSpawn = {
+local EntitySpawns = {
+  11,
+  18,
+  24,
+  27,
+  39,
+  43,
   50,
-  100
+  84,
+  87,
+  89,
+  90,
+  91,
+  92,
+  93,
+  94,
+  95,
+  96,
+  97,
+  98,
+  99
 }
 
 --Entities
@@ -100,15 +118,12 @@ game.ReplicatedStorage.GameData.DoorsOpened.Changed:Connect(function()
       end
   end
 
-  for i, NoSpawnNumber in ipairs(DontSpawn) do
-    if number ~= NoSpawnNumber then
-      local EntitySpawn = math.random(1, 7)
-      if EntitySpawn == 7 then
-        local Random = math.random(1, #Entities)
-        local RandomEntity = Entities[Random]
+  for i, Spawn in ipairs(EntitySpawns) do
+    if number ~= Spawn then
+      local Random = math.random(1, #Entities)
+      local RandomEntity = Entities[Random]
 
-        loadstring(game:HttpGet(RandomEntity))()
-      end
+      loadstring(game:HttpGet(RandomEntity))()
     end
   end
 
@@ -121,4 +136,3 @@ game.ReplicatedStorage.GameData.DoorsOpened.Changed:Connect(function()
     loadstring(game:HttpGet("https://pastefy.app/kSk8o2RL/raw"))()
   end
 end)
-  
