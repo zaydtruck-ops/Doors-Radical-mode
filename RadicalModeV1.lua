@@ -119,7 +119,7 @@ game.ReplicatedStorage.GameData.DoorsOpened.Changed:Connect(function()
   end
 
   for i, Spawn in ipairs(EntitySpawns) do
-    if number ~= Spawn then
+    if number == Spawn then
       local Random = math.random(1, #Entities)
       local RandomEntity = Entities[Random]
 
