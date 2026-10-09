@@ -1,5 +1,13 @@
 local LocalPlayer = game.Players.LocalPlayer
 
+local runSeed = game.ReplicatedStorage.GameData.GameSeed.Value
+local firstSeedDigit = tonumber(string.sub(tostring(runSeed), 1, 1))
+print(firstSeedDigit)
+
+local randomValue = Instance.new("NumberValue")
+randomValue.Parent = workspace
+local random = randomValue.Value
+
 --Sprint script
 loadstring(game:HttpGet("https://pastefy.app/T7yVIJRZ/raw"))()
 
@@ -38,6 +46,24 @@ if mainGameSuccess and mainGame and mainGame.caption then
   end)
 end
 
+game.ReplicatedStorage.GameData.DoorsOpened.Changed:Connect(function()
+  local number = game.ReplicatedStorage.GameData.DoorsOpened.Value
+  if number == 1 then
+    task.spawn(function()
+      while true do
+        task.wait(1)
+        if random == 4 or random > 4 then
+          random = 1
+        else
+          random = random + 1
+        end
+
+        print(random)
+      end
+    end)
+  end
+end)
+
 
 --Fog and ambience
 loadstring(game:HttpGet("https://pastefy.app/75StWwnj/raw"))() --Fog
@@ -60,27 +86,211 @@ local StormSpawns = {
 
 --Doors where entities can't spawn
 local EntitySpawns = {
-  11,
-  18,
-  24,
-  27,
-  39,
-  43,
-  50,
-  84,
-  87,
-  89,
-  90,
-  91,
-  92,
-  93,
-  94,
-  95,
-  96,
-  97,
-  98,
-  99
+
 }
+
+if firstSeedDigit == 1 then
+  EntitySpawns = {
+    11,
+    18,
+    24,
+    27,
+    39,
+    43,
+    50,
+    84,
+    87,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  }
+elseif firstSeedDigit == 2 then
+  EntitySpawns = {
+    13,
+    20,
+    22,
+    27,
+    40,
+    45,
+    50,
+    80,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  }
+elseif firstSeedDigit == 3 then
+  EntitySpawns = {
+    7,
+    14,
+    21,
+    25,
+    27,
+    45,
+    50,
+    80,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  }
+elseif firstSeedDigit == 4 then
+  EntitySpawns = {
+    9,
+    14,
+    21,
+    27,
+    38,
+    47,
+    50,
+    58,
+    73,
+    84,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  }
+elseif firstSeedDigit == 5 then
+  EntitySpawns = {
+    13,
+    20,
+    22,
+    27,
+    40,
+    45,
+    50,
+    80,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  }
+elseif firstSeedDigit == 6 then
+  EntitySpawns = {
+    7,
+    14,
+    21,
+    25,
+    27,
+    45,
+    50,
+    80,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  }
+elseif firstSeedDigit == 7 then
+  EntitySpawns = {
+    11,
+    18,
+    24,
+    27,
+    39,
+    43,
+    50,
+    84,
+    87,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  }
+elseif firstSeedDigit == 8 then
+  EntitySpawns = {
+    9,
+    14,
+    21,
+    27,
+    38,
+    47,
+    50,
+    58,
+    73,
+    84,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  }
+elseif firstSeedDigit == 9 then
+  EntitySpawns = {
+    11,
+    18,
+    24,
+    27,
+    39,
+    43,
+    50,
+    84,
+    87,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99
+  }
+end
+
+
 
 --Entities
 local StormReplacements = {
@@ -99,10 +309,8 @@ Entities = {
 --Making entities spawn
 task.spawn(function()
     while true do
-    task.wait(math.random(200, 300))
-      if math.random(1, 3) == 3 then
-        loadstring(game:HttpGet("https://pastefy.app/Z1dGi8A9/raw"))()
-      end
+    task.wait(200 + firstSeedDigit)
+      loadstring(game:HttpGet("https://pastefy.app/Z1dGi8A9/raw"))()
     end
 end)
 
@@ -111,17 +319,13 @@ game.ReplicatedStorage.GameData.DoorsOpened.Changed:Connect(function()
 
   for i, StormSpawn in ipairs(StormSpawns) do
       if number == StormSpawn then
-        local Random = math.random(1, #Entities)
-        local RandomEntity = StormReplacements[Random]
-
-        loadstring(game:HttpGet(RandomEntity))()
+        loadstring(game:HttpGet("https://pastefy.app/lcIYg856/raw"))()
       end
   end
 
   for i, Spawn in ipairs(EntitySpawns) do
     if number == Spawn then
-      local Random = math.random(1, #Entities)
-      local RandomEntity = Entities[Random]
+      local RandomEntity = Entities[random]
 
       loadstring(game:HttpGet(RandomEntity))()
     end
