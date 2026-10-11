@@ -1,0 +1,21 @@
+local Kill = true
+local eye = game:GetObjects("rbxassetid://107831010362341")[1]
+eye.Parent = game.Workspace
+
+local eyes = eye:FindFirstChildWhichIsA("BasePart") or eye:FindFirstChildWhichIsA("Part")
+eyes.CFrame = game.Workspace.CurrentRooms:GetChildren()[#game.Workspace.CurrentRooms:GetChildren() - 1].Parts.Floor.CFrame + Vector3.new(0,5,0)
+
+local plr = game.Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
+task.spawn(function()
+	while true do
+		local camera, onScreen = camera:WorldToViewportPoint(eyes.Position)
+		
+		if not onScreen and eye and plr:DistanceFromCharacter(eyes.position) <= 45 then
+			plr.Character.Humanoid:TakeDamage(2)
+		end
+		
+		task.wait(0.1)
+	end
+end)
