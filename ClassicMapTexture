@@ -1,0 +1,30 @@
+task.spawn(function()
+  for i, descendant in ipairs(workspace:GetDescendants()) do
+    if descendant:IsA("Part") or descendant:IsA("MeshPart") or descendant:IsA("BasePart") then
+      if descendant.Material == Enum.Material.Wood then
+        descendant.MaterialVariant = ""
+        task.wait()
+      end
+    end
+  end
+
+  game.ReplicatedStorage.GameData.DoorsOpened.Changed:Connect(function()
+    for i, descendant in ipairs(workspace:GetDescendants()) do
+      if descendant:IsA("Part") or descendant:IsA("MeshPart") or descendant:IsA("BasePart") then
+        if descendant.Material == Enum.Material.Wood then
+          descendant.MaterialVariant = ""
+          task.wait()
+        end
+      end
+    end
+  end)
+
+  workspace.DescendantAdded:Connect(function(descendant)
+    if descendant:IsA("Part") or descendant:IsA("MeshPart") or descendant:IsA("BasePart") then
+      if descendant.Material == Enum.Material.Wood then
+        descendant.MaterialVariant = ""
+        task.wait()
+      end
+    end
+  end)
+end)
