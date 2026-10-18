@@ -1,0 +1,196 @@
+local CustomAchievements = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/DOORS-Custom-Achievements/main/init.luau"))()
+
+local function ShakeAndThunderOnSpawn()
+    task.spawn(function()
+        local thunderSound = Instance.new("Sound")
+        thunderSound.Volume = 1
+        thunderSound.SoundId = "rbxassetid://136669683183289"
+        thunderSound.Parent = game.SoundService
+        thunderSound:Play()
+
+        task.wait(1.2)
+        local thunderSound2 = Instance.new("Sound")
+        thunderSound2.Volume = 1
+        thunderSound2.PlaybackSpeed = 0.5
+        thunderSound2.SoundId = "rbxassetid://15110260312"
+        thunderSound2.Parent = game.SoundService
+        thunderSound2:Play()
+    end)
+
+    local CameraShaker = require(game.ReplicatedStorage.CameraShaker)
+    local camara = game.Workspace.CurrentCamera
+    local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
+    camara.CFrame = camara.CFrame * shakeCf
+    end)
+    camShake:Start()
+    camShake:ShakeOnce(20, 10, 0.1, 2, 3.5, 0.5)
+
+    local CC = game.Lighting.MainColorCorrection
+
+    CC.TintColor = Color3.fromRGB(50, 100, 255)
+    CC.Brightness = 5
+    CC.Contrast = 10
+    task.wait(0.1)
+    CC.TintColor = Color3.fromRGB(255, 255, 255)
+    CC.Contrast = 5
+    task.wait(0.1)
+    CC.Contrast = 10
+    CC.TintColor = Color3.fromRGB(0, 20, 255)
+    task.wait(0.1)
+    CC.TintColor = Color3.fromRGB(50, 100, 255)
+    CC.Brightness = 2
+    CC.Contrast = 4
+
+    local tween = game.TweenService:Create(CC,TweenInfo.new(5),{TintColor = Color3.fromRGB(255, 255, 255),Brightness = 0.04, Contrast = 0}):Play()
+
+    task.wait(0.5)
+    tween:Play()
+end
+
+local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/zaydtruck-ops/Vynixu-entity-spawner-modified-with-death-message-delay/refs/heads/main/Spawner"))()
+
+local MyEntity = Spawner:Create({
+    Entity = {
+        Name = "Storm",
+        Asset = "rbxassetid://129571713432889", --ENTITY MODEL
+        HeightOffset = 2
+    },
+    Movement = {
+        Speed = 275,
+        Delay = 4,
+        Reversed = false
+    },
+    Damage = {
+        Enabled = true,
+		IgnoreHiding = false,
+        Range = 40,
+        Amount = 700
+    },
+    Rebounding = {
+        Enabled = false,
+        Type = "Ambush", -- "Blitz"
+        Min = 1,
+        Max = 1,
+        Delay = 5
+    },
+    Lights = {
+        Flicker = {
+            Enabled = true,
+            Duration = 2
+        },
+        Shatter = true,
+        Repair = false
+    },
+    Earthquake = {
+        Enabled = false
+    },
+    CameraShake = {
+        Enabled = true,
+        Values = {10, 30, 0.5, 2}, -- Magnitude, Roughness, FadeIn, FadeOut
+        Range = 100
+    },
+    Crucifixion = {
+        Type = "Guiding", -- "Guiding"
+        Enabled = true,
+        Range = 40,
+        Resist = true,
+        Break = true
+    },
+    Death = {
+        Type = "Guiding", -- "Curious"
+        Hints = {"It seems you've just died to who we call Storm.", "One of the more powerful entities...", "But he doesnt use all his power,", "For now..", "Trust me, you aren't ready for what's coming."},
+        Cause = "Storm",
+        MessageDelay = 0.7
+    }
+})
+
+MyEntity:SetCallback("OnSpawned", function()
+    print("Entity has spawned")
+
+    ShakeAndThunderOnSpawn()
+end)
+
+MyEntity:SetCallback("OnStartMoving", function()
+    print("Entity has started moving")
+end)
+
+MyEntity:SetCallback("OnEnterRoom", function(room: Model, firstTime: boolean)
+    if firstTime == true then
+        print("Entity has entered room: ".. room.Name.. " for the first time")
+    else
+        print("Entity has entered room: ".. room.Name.. " again")
+    end
+end)
+
+MyEntity:SetCallback("OnLookAt", function(lineOfSight: boolean)
+	if lineOfSight == true then
+		print("Player is looking at entity")
+	else
+		print("Player view is obstructed by something")
+	end
+end)
+
+MyEntity:SetCallback("OnRebounding", function(startOfRebound: boolean)
+    if startOfRebound == true then
+        print("Entity has started rebounding")
+	else
+        print("Entity has finished rebounding")
+	end
+end)
+
+MyEntity:SetCallback("OnDespawning", function()
+    print("Entity is despawning")
+    local windSound = Instance.new("Sound")
+    windSound.Volume = 3
+    windSound.PlaybackSpeed = 1.2
+    windSound.SoundId = "rbxassetid://224339308"
+    windSound.Parent = game.SoundService
+    windSound:Play()
+    local windSound2 = Instance.new("Sound")
+    windSound2.Volume = 2
+    windSound2.PlaybackSpeed = 0.8
+    windSound2.SoundId = "rbxassetid://224339308"
+    windSound2.Parent = game.SoundService
+    windSound2:Play()
+end)
+
+MyEntity:SetCallback("OnDespawned", function()
+    print("Entity has despawned")
+    CustomAchievements:Grant({
+        Identifier = "Storm",
+        Title = "My ears...",
+        Desc = "my eardrums have burst.",
+        Reason = "Successfuly survive Storm.",
+        Image = "rbxassetid://108652968830556"
+    }, {
+        CheckOwned = true,
+        Remember = false
+    })
+    local equalizerSoundEffect = Instance.new("EqualizerSoundEffect")
+
+    local thunderSound = Instance.new("Sound")
+    equalizerSoundEffect.Parent = thunderSound
+
+    thunderSound.Volume = 2
+    thunderSound.SoundId = "rbxassetid://93403424380357"
+    thunderSound.Parent = game.SoundService
+    thunderSound:Play()
+
+    local thunderSound2 = Instance.new("Sound")
+    thunderSound2.Volume = 0.5
+    thunderSound2.SoundId = "rbxassetid://93403424380357"
+    thunderSound2.Parent = game.SoundService
+    thunderSound2:Play()
+end)
+
+MyEntity:SetCallback("OnDamagePlayer", function(newHealth: number)
+	if newHealth <= 0 then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/zaydtruck-ops/Doors-Radical-mode/refs/heads/main/StormJumpscare"))()
+		print("Entity has killed the player")
+	else
+		print("Entity has damaged the player")
+	end
+end)
+
+--SPAWN ENTITY
+MyEntity:Run(true) -- creates & runs a copy of your entity template
