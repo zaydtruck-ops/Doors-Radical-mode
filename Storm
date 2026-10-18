@@ -100,7 +100,7 @@ local MyEntity = Spawner:Create({
         Type = "Guiding", -- "Curious"
         Hints = {"It seems you've just died to who we call Storm.", "One of the more powerful entities...", "But he doesnt use all his power,", "For now..", "Trust me, you aren't ready for what's coming."},
         Cause = "Storm",
-        MessageDelay = 0.7
+        MessageDelay = 0.9
     }
 })
 
