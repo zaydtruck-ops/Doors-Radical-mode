@@ -1,0 +1,125 @@
+local CustomAchievements = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/DOORS-Custom-Achievements/main/init.luau"))()
+
+task.spawn(function()
+    game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(100, 0, 255)
+    task.wait(5)
+    game.Lighting.MainColorCorrection.TintColor = Color3.fromRGB(255, 255, 255)
+end)
+
+local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/DOORS-Entity-Spawner-V2/main/init.luau"))()
+
+local MyEntity = Spawner:Create({
+    Entity = {
+        Name = "Truelnyte",
+        Asset = "https://github.com/zaydtruck-ops/TruelnyteDoorsEnitity/raw/refs/heads/main/Truelnyte.rbxm?raw=true", --ENTITY MODEL
+        HeightOffset = 0
+    },
+    Movement = {
+        Speed = 400,
+        Delay = 7,
+        Reversed = true
+    },
+    Damage = {
+        Enabled = true,
+		IgnoreHiding = false,
+        Range = 40,
+        Amount = 200
+    },
+    Rebounding = {
+        Enabled = true,
+        Type = "Ambush", -- "Blitz"
+        Min = 2,
+        Max = 3,
+        Delay = 7
+    },
+    Lights = {
+        Flicker = {
+            Enabled = true,
+            Duration = 3
+        },
+        Shatter = false,
+        Repair = true
+    },
+    Earthquake = {
+        Enabled = false
+    },
+    CameraShake = {
+        Enabled = true,
+        Values = {20, 20, 0, 2}, -- Magnitude, Roughness, FadeIn, FadeOut
+        Range = 100
+    },
+    Crucifixion = {
+        Type = "Guiding", -- "Guiding"
+        Enabled = true,
+        Range = 40,
+        Resist = false,
+        Break = false
+    },
+    Death = {
+        Type = "Guiding", -- "Curious"
+        Hints = {"Hmmm...", "I'm gonna call it...", "Truelnyte.", "I believe it stalls before rebounding,", "always exit your closet before it comes back.",
+        "Good luck."},
+        Cause = "Depth"
+    }
+})
+
+MyEntity:SetCallback("OnSpawned", function()
+    print("Entity has spawned")
+end)
+
+MyEntity:SetCallback("OnStartMoving", function()
+    print("Entity has started moving")
+end)
+
+MyEntity:SetCallback("OnEnterRoom", function(room: Model, firstTime: boolean)
+    if firstTime == true then
+        print("Entity has entered room: ".. room.Name.. " for the first time")
+    else
+        print("Entity has entered room: ".. room.Name.. " again")
+    end
+end)
+
+MyEntity:SetCallback("OnLookAt", function(lineOfSight: boolean)
+	if lineOfSight == true then
+		print("Player is looking at entity")
+	else
+		print("Player view is obstructed by something")
+	end
+end)
+
+MyEntity:SetCallback("OnRebounding", function(startOfRebound: boolean)
+    if startOfRebound == true then
+        print("Entity has started rebounding")
+	else
+        print("Entity has finished rebounding")
+	end
+end)
+
+MyEntity:SetCallback("OnDespawning", function()
+    print("Entity is despawning")
+end)
+
+MyEntity:SetCallback("OnDespawned", function()
+        print("Entity has despawned")
+        CustomAchievements:Grant({
+        Identifier = "Truelnyte",
+        Title = "One moment",
+        Desc = "...and it strikes back...",
+        Reason = "Survive Truelnyte.",
+        Image = "rbxassetid://94736804519101"
+    }, {
+        CheckOwned = false,
+        Remember = true
+    })
+end)
+
+MyEntity:SetCallback("OnDamagePlayer", function(newHealth: number)
+	if newHealth <= 0 then
+		print("Entity has killed the player")
+	else
+		print("Entity has damaged the player")
+	end
+end)
+
+--SPAWN ENTITY
+MyEntity:Run(true) -- creates & runs a copy of your entity template)()
